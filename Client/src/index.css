@@ -2,3 +2,10 @@
     display: none
    
 }
+.bg-delete{
+    background-color: #ff7675;
+}
+.bg-submit {
+    background-color: #a29bfe;
+}
+

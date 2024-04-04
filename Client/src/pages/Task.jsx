@@ -8,115 +8,82 @@ import { CiSearch } from "react-icons/ci";
 import { Header } from "../components/Navbar";
 import { AddTask } from "../components/Modal";
 
+import { GoSortAsc } from "react-icons/go";
+import { GoSortDesc } from "react-icons/go";
+import { Table } from "../components/Table";
 
-const tasks = [
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Medium",
-    status: "Ready",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "High",
-    status: "PR Done",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Low",
-    status: "Not Started",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Medium",
-    status: "In Progress",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Medium",
-    status: "Delivered",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Medium",
-    status: "Proof Reading",
-  },
-];
+
 
 export default function Task() {
-  const [task, setTask] = useState(tasks);
+
+
+  const [status, setStatus] = useState("");
+  const [sortBy, setSortBy] = useState("");
+
+  const handleStatus = (status) => setStatus(status);
+  const handleSort = (sort) => setSortBy(sort);
+
   const navigate = useNavigate();
 
   return (
     <div className="container">
       <Header />
       <div className="d-flex justify-content-between mt-3">
-        <div>
-          <div className="d-flex align-items-center gap-4">
-            <Dropdown>
-              <Dropdown.Toggle
-                className="bg-white shadow-sm text-dark"
-                id="dropdown-basic"
-              >
-                <CiFilter /> Filter
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="border-0 shadow">
-                <Dropdown.Item href="#/action-1">Ready</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">PR Done</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">In Progress</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">Delivered</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">Not Started</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">Proof Reading</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+        <AddTask />
+        <div className="d-flex align-items-center gap-4">
+          <Form.Control
+            type="search"
+            placeholder="Search"
+            className="me-2"
+            aria-label="Search"
+          />
+          <Dropdown>
+            <Dropdown.Toggle
+              className="bg-white shadow-sm text-dark"
+              id="dropdown-basic"
+            >
+              {sortBy === "Descending" || sortBy === "" ? (
+                <GoSortDesc />
+              ) : (
+                <GoSortAsc />
+              )}{" "}
+              {sortBy === "" ? "Descending" : sortBy}
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="border-0 shadow">
+              <Dropdown.Item onClick={() => handleSort("Ascending")}>
+                Ascending
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleSort("Descending")}>
+                Descending
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
 
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-          </div>
+          <Dropdown>
+            <Dropdown.Toggle
+              className="bg-white shadow-sm text-dark"
+              id="dropdown-basic"
+            >
+              <CiFilter /> {status === "" ? "All" : status}
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="border-0 shadow">
+              <Dropdown.Item onClick={() => handleStatus("In Progress")}>
+                In Progress
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleStatus("Todo")}>
+                Todo
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleStatus("In Review")}>
+                In Review
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleStatus("Completed")}>
+                Completed
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
-        <AddTask/>
-      
       </div>
-      <div className="table-responsive shadow-sm p-3 bg-white rounded-3 mt-2">
-        <table className="table table-hover table-borderless text-center">
-          <thead>
-            <tr>
-              <th className="text-primary align-middle">Sl.No</th>
-              <th className="text-primary align-middle">Task</th>
-              <th className="text-primary align-middle">Status</th>
-              <th className="text-primary align-middle">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {task.map((data, index) => (
-              <tr key={index}>
-                <td className="text-secondary align-middle">{index + 1}</td>
-                <td
-                  className="py-3 align-middle text-secondary cursor-pointer align-middle"
-                  onClick={() => navigate("/task/details/1")}
-                >
-                  {data.taskName}
-                </td>
-
-                <td className="align-middle text-secondary">{data.status}</td>
-                <td className="align-middle text-secondary">
-                  <button>edit</button>
-                  <button>delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <Table></Table>
     </div>
   );
 }
