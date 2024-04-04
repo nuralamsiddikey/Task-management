@@ -11,14 +11,14 @@ import { AddTask } from "../components/Modal";
 import { GoSortAsc } from "react-icons/go";
 import { GoSortDesc } from "react-icons/go";
 import { Table } from "../components/Table";
+import { useTaskContext } from "../context/task";
 
 
 
 export default function Task() {
-
-
   const [status, setStatus] = useState("");
   const [sortBy, setSortBy] = useState("");
+ 
 
   const handleStatus = (status) => setStatus(status);
   const handleSort = (sort) => setSortBy(sort);
@@ -46,7 +46,7 @@ export default function Task() {
                 <GoSortDesc />
               ) : (
                 <GoSortAsc />
-              )}{" "}
+              )}
               {sortBy === "" ? "Descending" : sortBy}
             </Dropdown.Toggle>
             <Dropdown.Menu className="border-0 shadow">
@@ -83,7 +83,7 @@ export default function Task() {
           </Dropdown>
         </div>
       </div>
-    <Table></Table>
+    <Table/>
     </div>
   );
 }

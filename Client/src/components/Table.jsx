@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import Pagination from "react-bootstrap/Pagination";
+import { useTaskContext } from "../context/task";
+
 
 const tasks = [
   {
@@ -42,16 +44,8 @@ const tasks = [
 ];
 
 export const Table = () => {
-  const [task, setTask] = useState(tasks);
-  let active = 2;
-  let items = [];
-  for (let number = 1; number <= 5; number++) {
-    items.push(
-      <Pagination.Item key={number} active={number === active}>
-        {number}
-      </Pagination.Item>
-    );
-  }
+ // const [task, setTask] = useState(tasks);
+  const {task} = useTaskContext()
 
   return (
     <div className="table-responsive shadow-sm p-3 bg-white rounded-3 mt-2">
@@ -65,14 +59,14 @@ export const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {task.map((data, index) => (
+          {task?.map((data, index) => (
             <tr key={index}>
-              <td className="align-middle text-secondary">2023/34/23</td>
+              <td className="align-middle text-secondary">{new Date(data.createdAt).toISOString().split('T')[0]}</td>
               <td
                 title="View details"
                 className="py-3 align-middle text-secondary cursor-pointer align-middle"
               >
-                {data.taskName}
+                {data.title}
               </td>
 
               <td className="align-middle text-secondary">{data.status}</td>
@@ -85,7 +79,7 @@ export const Table = () => {
           ))}
         </tbody>
       </table>
-      <nav aria-label="Page navigation example">
+      <nav aria-label="Page navigation example" className="mt-5">
         <ul class="pagination">
           <li class="page-item">
             <a class="page-link" href="#">

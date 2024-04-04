@@ -4,10 +4,38 @@ import Modal from "react-bootstrap/Modal";
 import { FaPlus } from "react-icons/fa6";
 import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
+import toast from 'react-hot-toast'
+import { base } from "../api";
 
 export const AddTask = () => {
   const [show, setShow] = useState(false);
   const [status, setStatus] = useState("Todo");
+  const [task, setTask] = useState({
+    title: "",
+    body: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setTask((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = ()=> {
+     if(!task.title)
+     return toast.error('Title is missing!!')
+    else {
+      fetch(base+'/task',{
+        method:'POST',
+        headers: {
+          'Content-type':'application/json'
+        },
+        body: JSON.stringify({...task,status})
+      })
+      .then(res=>  console.log(res.json()))
+      
+    }
+  }
+
 
   const handleStatus = (status) => setStatus(status);
 
@@ -38,14 +66,22 @@ export const AddTask = () => {
           <Form.Label htmlFor="title">Title</Form.Label>
           <Form.Control
             name="title"
-            // onChange={handleInput}
+            value={task.title}
+            onChange={handleChange}
             id="title"
           />
 
-          <Form.Label htmlFor="title" className="mt-2">
+          <Form.Label htmlFor="body" className="mt-2">
             Description
           </Form.Label>
-          <Form.Control as="textarea" rows={4} />
+          <Form.Control
+            as="textarea"
+            rows={4}
+            id="body"
+            name="body"
+            value={task.body}
+            onChange={handleChange}
+          />
           <p className="mt-3 mb-1">Status</p>
           <Dropdown>
             <Dropdown.Toggle
@@ -70,8 +106,10 @@ export const AddTask = () => {
             </Dropdown.Menu>
           </Dropdown>
           <div className="d-flex gap-3 justify-content-end mt-4">
-            <Button className="btn bg-delete text-white border-0">Cancel</Button>
-            <Button className="btn bg-submit text-white border">Submit</Button>
+            <Button className="btn bg-delete text-white border-0">
+              Cancel
+            </Button>
+            <Button className="btn bg-submit text-white border" onClick={handleSubmit}>Submit</Button>
           </div>
         </Modal.Body>
       </Modal>
