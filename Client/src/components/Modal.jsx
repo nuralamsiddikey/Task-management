@@ -80,7 +80,7 @@ export const AddTask = () => {
   return (
     <>
       <Button
-        className="btn d-flex align-items-center gap-1 text-white bg-submit border-0"
+        className="d-flex align-items-center gap-1 text-white bg-submit border-0"
         onClick={() => {
           setTask({ title: "", body: "" });
           setStatus("Todo");

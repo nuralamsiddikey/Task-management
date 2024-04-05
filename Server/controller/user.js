@@ -5,6 +5,9 @@ import jwt from 'jsonwebtoken'
 import User from "../model/User.js";
 const userRouter = express.Router();
 
+
+
+
 userRouter.post("/", async (req, res) => {
   try {
     let { fullName, email, password } = req.body;
@@ -46,5 +49,15 @@ userRouter.post("/login", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+
+userRouter.get('/verify',async(req,res)=> {
+  try {
+
+  }catch(err){
+    res.status(500).json({ error: err.message });
+  }
+})
 
 export { userRouter };

@@ -5,15 +5,16 @@ import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import { Signin } from './pages/Signin'
 import { Signup } from './pages/Signup'
 import Task from './pages/Task';
+import PrivateRoute from './PrivateRoutes';
 
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
     <>
       <BrowserRouter>
          <Routes>
-            <Route path='/' element={<Task/>}/>
+            <Route path='/' element={<PrivateRoute><Task/></PrivateRoute>}/>
              <Route path='/signin' element={<Signin/>}/>
              <Route path='/signup' element={<Signup/>}/>
          </Routes>
