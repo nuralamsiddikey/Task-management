@@ -10,7 +10,7 @@ taskRouter.post("/", async (req, res) => {
     await task.save();
     res.status(201).json({ message: "Successfully created task" });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
@@ -36,9 +36,10 @@ taskRouter.get("/", async (req, res) => {
       data: tasks,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
+
 
 taskRouter.put("/:id", async (req, res) => {
   const { id } = req.params.id;

@@ -4,8 +4,9 @@ import Modal from "react-bootstrap/Modal";
 import { FaPlus } from "react-icons/fa6";
 import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 import { base } from "../api";
+import { useTaskContext } from "../context/task";
 
 export const AddTask = () => {
   const [show, setShow] = useState(false);
@@ -14,31 +15,45 @@ export const AddTask = () => {
     title: "",
     body: "",
   });
+  const { fetchTasks } = useTaskContext();
 
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     setTask((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = ()=> {
-     if(!task.title)
-     return toast.error('Title is missing!!')
+  const handleSubmit = () => {
+    if (!task.title) return toast.error("Title  missing!!");
     else {
-      fetch(base+'/task',{
-        method:'POST',
+      fetch(base + "/task", {
+        method: "POST",
         headers: {
-          'Content-type':'application/json'
+          "Content-type": "application/json",
         },
-        body: JSON.stringify({...task,status})
+        body: JSON.stringify({ ...task, status }),
       })
-      .then(res=>  console.log(res.json()))
-      
+        .then(async (res) => {
+          if (res.ok) return res.json();
+          else {
+            const data = await res.json();
+            throw new Error(data.error);
+          }
+        })
+        .then((result) => {
+          toast.success(result.message);
+          fetchTasks();
+          setStatus("Todo");
+          setTask({ title: "", body: "" });
+          handleClose();
+        })
+        .catch((error) => {
+          console.error("Error occurred:", error);
+          toast.error(error.message);
+        });
     }
-  }
-
+  };
 
   const handleStatus = (status) => setStatus(status);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -109,7 +124,12 @@ export const AddTask = () => {
             <Button className="btn bg-delete text-white border-0">
               Cancel
             </Button>
-            <Button className="btn bg-submit text-white border" onClick={handleSubmit}>Submit</Button>
+            <Button
+              className="btn bg-submit text-white border"
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
           </div>
         </Modal.Body>
       </Modal>

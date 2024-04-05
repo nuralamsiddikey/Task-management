@@ -28,15 +28,10 @@ export default function Task() {
   return (
     <div className="container">
       <Header />
-      <div className="d-flex justify-content-between mt-3">
-        <AddTask />
+      <div className="d-flex justify-content-between my-3">
+      
         <div className="d-flex align-items-center gap-4">
-          <Form.Control
-            type="search"
-            placeholder="Search"
-            className="me-2"
-            aria-label="Search"
-          />
+        
           <Dropdown>
             <Dropdown.Toggle
               className="bg-white shadow-sm text-dark"
@@ -81,7 +76,14 @@ export default function Task() {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
+          <Form.Control
+            type="search"
+            placeholder="Search"
+            className="me-2"
+            aria-label="Search"
+          />
         </div>
+        <AddTask />
       </div>
     <Table/>
     </div>
