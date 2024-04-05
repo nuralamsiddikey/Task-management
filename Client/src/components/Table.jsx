@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RiDeleteBin6Fill } from "react-icons/ri";
+import { RiDeleteBin6Fill, RiEdit2Line } from "react-icons/ri";
 import Pagination from "react-bootstrap/Pagination";
 import { useTaskContext } from "../context/task";
 import { base } from "../api";
@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
 export const Table = () => {
-  const { task, fetchTasks } = useTaskContext();
+  const { taskList, fetchTasks, setShow, setTask } = useTaskContext();
+  const [hoverIndex, setHoverIndex] = useState(null);
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -53,16 +54,49 @@ export const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {task?.map((data, index) => (
-            <tr key={index}>
+          {taskList?.map((data, index) => (
+            <tr
+              key={index}
+              onMouseEnter={() => setHoverIndex(index)}
+              onMouseLeave={() => setHoverIndex(null)}
+            >
               <td className="align-middle text-secondary">
                 {new Date(data.createdAt).toISOString().split("T")[0]}
               </td>
               <td
                 title="View details"
-                className="py-3 align-middle text-secondary cursor-pointer align-middle"
+                className="py-3 align-middle text-secondary  align-middle"
               >
-                {data.title}
+                <div
+                  className="d-inline-block cursor-pointer"
+                  onClick={() => {
+                    setShow(true);
+                    console.log(data);
+                    setTask({
+                      id: data._id,
+                      title: data.title,
+                      body: data.body,
+                    });
+                  }}
+                >
+                  <p>
+                    {data.title}
+                    {hoverIndex === index && (
+                      <RiEdit2Line
+                        className="ml-2"
+                        size={20}
+                        color=""
+                        style={{ transition: "all 0.8s ease" }}
+                      />
+                    )}
+                  </p>
+
+                  <span>
+                    {data.body.length > 40
+                      ? `${data.body.slice(0, 40)}...`
+                      : data.body}
+                  </span>
+                </div>
               </td>
 
               <td className="align-middle text-secondary">{data.status}</td>

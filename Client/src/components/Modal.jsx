@@ -9,13 +9,8 @@ import { base } from "../api";
 import { useTaskContext } from "../context/task";
 
 export const AddTask = () => {
-  const [show, setShow] = useState(false);
-  const [status, setStatus] = useState("Todo");
-  const [task, setTask] = useState({
-    title: "",
-    body: "",
-  });
-  const { fetchTasks } = useTaskContext();
+  const { fetchTasks, show, setShow, status, setStatus, task, setTask } =
+    useTaskContext();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -53,6 +48,34 @@ export const AddTask = () => {
     }
   };
 
+
+
+  const handleEdit = () =>
+    fetch(base + `/task/${task.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ ...task, status }),
+    })
+      .then(async (res) => {
+        if (res.ok) return res.json();
+        else {
+          const data = await res.json();
+          throw new Error(data.error);
+        }
+      })
+      .then((result) => {
+        toast.success(result.message);
+        fetchTasks();
+        handleClose();
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+        toast.error(error.message);
+      });
+
+
   const handleStatus = (status) => setStatus(status);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -61,7 +84,11 @@ export const AddTask = () => {
     <>
       <Button
         className="btn d-flex align-items-center gap-1 text-white bg-submit border-0"
-        onClick={handleShow}
+        onClick={() => {
+          setTask({ title: "", body: "" });
+          setStatus("Todo");
+          handleShow();
+        }}
       >
         <FaPlus size={14} />
         <span>Add Task</span>
@@ -124,12 +151,22 @@ export const AddTask = () => {
             <Button className="btn bg-delete text-white border-0">
               Cancel
             </Button>
-            <Button
-              className="btn bg-submit text-white border"
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
+
+            {task.title ? (
+              <Button
+                className="btn bg-submit text-white border"
+                onClick={handleEdit}
+              >
+                Edit
+              </Button>
+            ) : (
+              <Button
+                className="btn bg-submit text-white border"
+                onClick={handleSubmit}
+              >
+                Submit
+              </Button>
+            )}
           </div>
         </Modal.Body>
       </Modal>
