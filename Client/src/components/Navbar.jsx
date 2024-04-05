@@ -1,17 +1,12 @@
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import Image from "react-bootstrap/Image";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import SplitButton from "react-bootstrap/SplitButton";
 
 export const Header = () => {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary py-3">
+    <Navbar expand="lg" className="bg-body-tertiary py-3 shadow-sm">
       <Container fluid>
         <Navbar.Brand>Task management</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -25,9 +20,7 @@ export const Header = () => {
             <Nav.Link href="#action2">Link</Nav.Link> */}
           </Nav>
 
-    
-
-         <Dropdown>
+          <Dropdown>
             <Dropdown.Toggle
               className="bg-body-tertiary border-0"
               id="dropdown-basic"
@@ -44,7 +37,7 @@ export const Header = () => {
               <Dropdown.Item>Profile</Dropdown.Item>
               <Dropdown.Item>Logout</Dropdown.Item>
             </Dropdown.Menu>
-          </Dropdown> 
+          </Dropdown>
         </Navbar.Collapse>
       </Container>
     </Navbar>

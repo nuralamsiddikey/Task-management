@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
 export const Table = () => {
-  const { taskList, fetchTasks, setShow, setTask } = useTaskContext();
+  const { taskList, fetchTasks, setShow, setTask,setStatus } = useTaskContext();
   const [hoverIndex, setHoverIndex] = useState(null);
 
   const handleDelete = (id) => {
@@ -43,7 +43,7 @@ export const Table = () => {
   };
 
   return (
-    <div className="table-responsive shadow-sm p-3 bg-white rounded-3 mt-2">
+    <div className="table-responsive  p-3 bg-white rounded-3 mt-2">
       <table className="table table-hover table-borderless">
         <thead className="text-secondary">
           <tr>
@@ -71,12 +71,12 @@ export const Table = () => {
                   className="d-inline-block cursor-pointer"
                   onClick={() => {
                     setShow(true);
-                    console.log(data);
                     setTask({
                       id: data._id,
                       title: data.title,
                       body: data.body,
                     });
+                    setStatus(data.status)
                   }}
                 >
                   <p>

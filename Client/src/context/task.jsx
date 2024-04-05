@@ -7,16 +7,19 @@ const taskContext = createContext();
 export const TaskContextProvider = ({ children }) => {
   const [taskList, setTaskList] = useState([]);
   const [show, setShow] = useState(false);
-  
-  const [status, setStatus] = useState("Todo");
+  const [status, setStatus] = useState("All");
+  const [sortBy, setSortBy] = useState("");
+  const [search,setSearch] = useState("")
   const [task, setTask] = useState({
     id:"",
     title: "",
     body: "",
   });
 
+
+
   const fetchTasks = () =>
-    fetch(base + "/task")
+    fetch(base + `/task?sort=${sortBy}&status=${status}`)
       .then(async (res) => {
         if (res.ok) return res.json();
         else {
@@ -37,7 +40,7 @@ export const TaskContextProvider = ({ children }) => {
 
   return (
     <taskContext.Provider
-      value={{ taskList, fetchTasks, show, setShow,task,setTask,status,setStatus }}
+      value={{ taskList, fetchTasks, show, setShow,task,setTask,status,setStatus ,sortBy,setSortBy}}
     >
       {children}
     </taskContext.Provider>
@@ -46,7 +49,7 @@ export const TaskContextProvider = ({ children }) => {
 
 
 export const useTaskContext = () => {
-  const { taskList, fetchTasks, show, setShow, task,setTask,status,setStatus } =
+  const { taskList, fetchTasks, show, setShow, task,setTask,status,setStatus,sortBy,setSortBy } =
     useContext(taskContext);
-  return { taskList, fetchTasks, show, setShow ,task,setTask,status,setStatus};
+  return { taskList, fetchTasks, show, setShow ,task,setTask,status,setStatus,sortBy,setSortBy};
 };

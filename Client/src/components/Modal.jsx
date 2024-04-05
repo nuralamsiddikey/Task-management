@@ -48,8 +48,6 @@ export const AddTask = () => {
     }
   };
 
-
-
   const handleEdit = () =>
     fetch(base + `/task/${task.id}`, {
       method: "PUT",
@@ -74,7 +72,6 @@ export const AddTask = () => {
         console.error("Error occurred:", error);
         toast.error(error.message);
       });
-
 
   const handleStatus = (status) => setStatus(status);
   const handleClose = () => setShow(false);
@@ -102,7 +99,9 @@ export const AddTask = () => {
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title className="text-secondary">Add new task</Modal.Title>
+          <Modal.Title className="text-secondary">
+            {task.title ? <span>Edit tast</span> : <span> Add new task</span>}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-secondary p-5">
           <Form.Label htmlFor="title">Title</Form.Label>
@@ -147,8 +146,12 @@ export const AddTask = () => {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
+          
           <div className="d-flex gap-3 justify-content-end mt-4">
-            <Button className="btn bg-delete text-white border-0">
+            <Button
+              className="btn bg-delete text-white border-0"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
 
