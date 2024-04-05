@@ -8,4 +8,6 @@
 .bg-submit {
     background-color: #a29bfe;
 }
-
+.cursor-pointer {
+    cursor: pointer;
+}

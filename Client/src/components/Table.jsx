@@ -2,50 +2,44 @@ import { useState } from "react";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import Pagination from "react-bootstrap/Pagination";
 import { useTaskContext } from "../context/task";
-
-
-const tasks = [
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Medium",
-    status: "Ready",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "High",
-    status: "PR Done",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Low",
-    status: "Not Started",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Medium",
-    status: "In Progress",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Medium",
-    status: "Delivered",
-  },
-  {
-    taskName: "A230801 ICON Cristina Meruata THM-117 Research Project",
-    dateOfSubmission: "23/04/2024",
-    priority: "Medium",
-    status: "Proof Reading",
-  },
-];
+import { base } from "../api";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 export const Table = () => {
- // const [task, setTask] = useState(tasks);
-  const {task} = useTaskContext()
+  const { task, fetchTasks } = useTaskContext();
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(base + `/task/${id}`, {
+          method: "DELETE",
+        })
+          .then(async (res) => {
+            if (res.ok) return res.json();
+            else {
+              const data = await res.json();
+              throw new Error(data.error);
+            }
+          })
+          .then((result) => {
+            toast.success(result.message);
+            fetchTasks();
+          })
+          .catch((error) => {
+            toast.error(error.message);
+          });
+      }
+    });
+  };
 
   return (
     <div className="table-responsive shadow-sm p-3 bg-white rounded-3 mt-2">
@@ -61,7 +55,9 @@ export const Table = () => {
         <tbody>
           {task?.map((data, index) => (
             <tr key={index}>
-              <td className="align-middle text-secondary">{new Date(data.createdAt).toISOString().split('T')[0]}</td>
+              <td className="align-middle text-secondary">
+                {new Date(data.createdAt).toISOString().split("T")[0]}
+              </td>
               <td
                 title="View details"
                 className="py-3 align-middle text-secondary cursor-pointer align-middle"
@@ -71,9 +67,13 @@ export const Table = () => {
 
               <td className="align-middle text-secondary">{data.status}</td>
               <td className="align-middle text-secondary">
-                <button className="btn bg-delete">
-                  <RiDeleteBin6Fill color="white" />
-                </button>
+                <RiDeleteBin6Fill
+                  onClick={() => handleDelete(data._id)}
+                  title="delete"
+                  color="red"
+                  size={30}
+                  className="bg-light p-2 rounded-circle cursor-pointer"
+                />
               </td>
             </tr>
           ))}

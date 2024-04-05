@@ -13,12 +13,9 @@ import { GoSortDesc } from "react-icons/go";
 import { Table } from "../components/Table";
 import { useTaskContext } from "../context/task";
 
-
-
 export default function Task() {
   const [status, setStatus] = useState("");
   const [sortBy, setSortBy] = useState("");
- 
 
   const handleStatus = (status) => setStatus(status);
   const handleSort = (sort) => setSortBy(sort);
@@ -29,9 +26,7 @@ export default function Task() {
     <div className="container">
       <Header />
       <div className="d-flex justify-content-between my-3">
-      
         <div className="d-flex align-items-center gap-4">
-        
           <Dropdown>
             <Dropdown.Toggle
               className="bg-white shadow-sm text-dark"
@@ -85,7 +80,7 @@ export default function Task() {
         </div>
         <AddTask />
       </div>
-    <Table/>
+      <Table />
     </div>
   );
 }
