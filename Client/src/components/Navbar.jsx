@@ -3,8 +3,18 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Image from "react-bootstrap/Image";
 import Dropdown from "react-bootstrap/Dropdown";
+import {useNavigate} from 'react-router-dom'
 
 export const Header = () => {
+  const navigate = useNavigate()
+  const fullName = localStorage.getItem('fullName')
+
+  const handleLogout = ()=> {
+    localStorage.removeItem('token')
+    localStorage.removeItem('fullName')
+    navigate('/signin')
+  }
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary py-3 shadow-sm">
       <Container fluid>
@@ -19,7 +29,7 @@ export const Header = () => {
             {/* <Nav.Link href="#action1">Home</Nav.Link>
             <Nav.Link href="#action2">Link</Nav.Link> */}
           </Nav>
-
+           <span className="text-secondary">{fullName}</span>
           <Dropdown>
             <Dropdown.Toggle
               className="bg-body-tertiary border-0"
@@ -34,8 +44,7 @@ export const Header = () => {
               />
             </Dropdown.Toggle>
             <Dropdown.Menu className="border-0 shadow">
-              <Dropdown.Item>Profile</Dropdown.Item>
-              <Dropdown.Item>Logout</Dropdown.Item>
+              <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Collapse>

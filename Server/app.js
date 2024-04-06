@@ -21,7 +21,9 @@ main()
 
 import { taskRouter } from "./src/controller/task.js";
 import { userRouter } from "./src/controller/user.js";
-app.use("/task",taskRouter)
+import { IsAuthenticate } from "./src/middleware/authenticate.js";
+
+app.use("/task",IsAuthenticate,taskRouter)
 app.use("/user",userRouter)
 
 

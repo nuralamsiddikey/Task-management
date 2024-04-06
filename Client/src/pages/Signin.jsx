@@ -14,8 +14,9 @@ export const Signin = () => {
     email: "",
     password: "",
   });
-  const { login } = useAuthContext();
+
   const navigate = useNavigate();
+  const {setToken} = useAuthContext()
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -48,9 +49,10 @@ export const Signin = () => {
           }
         })
         .then((result) => {
-          login();
-          navigate("/");
+          setToken(result.token)
           localStorage.setItem("token", result.token);
+          localStorage.setItem("fullName", result.fullName);
+          navigate("/");
         })
         .catch((error) => {
           toast.error(error.message);

@@ -8,9 +8,22 @@ import toast from "react-hot-toast";
 import { base } from "../api";
 import { useTaskContext } from "../context/task";
 
+
 export const AddTask = () => {
-  const { fetchTasks, show, setShow, status, setStatus, task, setTask,singleStatus,setSingleStatus } =
-    useTaskContext();
+  const {
+    fetchTasks,
+    show,
+    setShow,
+    status,
+    setStatus,
+    task,
+    setTask,
+    singleStatus,
+    setSingleStatus,
+    setAction,
+    action,
+  } = useTaskContext();
+  const token = localStorage.getItem("token");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -24,8 +37,9 @@ export const AddTask = () => {
         method: "POST",
         headers: {
           "Content-type": "application/json",
+          authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ ...task, status }),
+        body: JSON.stringify({ ...task, status: singleStatus }),
       })
         .then(async (res) => {
           if (res.ok) return res.json();
@@ -37,7 +51,7 @@ export const AddTask = () => {
         .then((result) => {
           toast.success(result.message);
           fetchTasks();
-          setStatus("Todo");
+          setSingleStatus("Todo");
           setTask({ title: "", body: "" });
           handleClose();
         })
@@ -53,6 +67,7 @@ export const AddTask = () => {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ ...task, status: singleStatus }),
     })
@@ -79,17 +94,18 @@ export const AddTask = () => {
 
   return (
     <>
-      <Button
-        className="d-flex align-items-center gap-1 text-white bg-submit border-0"
+      <button
+        className="d-flex align-items-center gap-1 btn btn-outline-primary"
         onClick={() => {
           setTask({ title: "", body: "" });
-          setStatus("Todo");
+          setSingleStatus("Todo");
           handleShow();
+          setAction("add");
         }}
       >
         <FaPlus size={14} />
         <span>Add Task</span>
-      </Button>
+      </button>
       <Modal
         show={show}
         onHide={handleClose}
@@ -100,7 +116,11 @@ export const AddTask = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title className="text-secondary">
-            {task.title ? <span>Edit tast</span> : <span> Add new task</span>}
+            {action === "edit" ? (
+              <span>Edit tast</span>
+            ) : (
+              <span> Add new task</span>
+            )}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-secondary p-5">
@@ -146,7 +166,7 @@ export const AddTask = () => {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-          
+
           <div className="d-flex gap-3 justify-content-end mt-4">
             <Button
               className="btn bg-delete text-white border-0"
@@ -155,7 +175,7 @@ export const AddTask = () => {
               Cancel
             </Button>
 
-            {task.title ? (
+            {action === "edit" ? (
               <Button
                 className="btn bg-submit text-white border"
                 onClick={handleEdit}

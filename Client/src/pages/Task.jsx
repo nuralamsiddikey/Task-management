@@ -73,12 +73,6 @@ export default function Task() {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
           </div>
           <AddTask />
         </div>

@@ -53,7 +53,8 @@ userRouter.post("/login", async (req, res) => {
 
     const token = jwt.sign(
       {
-        userName: existUser.userName,
+        id: existUser._id,
+        fullName: existUser.fullName,
         email: existUser.email,
       },
       "SKDFDLK09UU@@@SKDJDHF2233"
@@ -62,7 +63,7 @@ userRouter.post("/login", async (req, res) => {
     res.status(200).json({
       message: "Login success",
       token: token,
-      userName: existUser.fullName,
+      fullName: existUser.fullName,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -5,10 +5,13 @@ import { useTaskContext } from "../context/task";
 import { base } from "../api";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import { useAuthContext } from "../context/auth";
 
 export const Table = () => {
-  const { taskList, fetchTasks, setShow, setTask,setSingleStatus } = useTaskContext();
+  const { taskList, fetchTasks, setShow, setTask,setSingleStatus,setAction } = useTaskContext();
   const [hoverIndex, setHoverIndex] = useState(null);
+  const token = localStorage.getItem("token");
+
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -23,6 +26,9 @@ export const Table = () => {
       if (result.isConfirmed) {
         fetch(base + `/task/${id}`, {
           method: "DELETE",
+          headers: {
+            authorization: `Bearer ${token}`
+          }
         })
           .then(async (res) => {
             if (res.ok) return res.json();
@@ -77,6 +83,7 @@ export const Table = () => {
                       body: data.body,
                     });
                     setSingleStatus(data.status)
+                    setAction('edit')
                   }}
                 >
                   <p>

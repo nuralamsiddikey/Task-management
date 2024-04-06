@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { base } from "../api";
 import toast from "react-hot-toast";
+import { useAuthContext } from "./auth";
 
 const taskContext = createContext();
 
@@ -8,19 +9,26 @@ export const TaskContextProvider = ({ children }) => {
   const [taskList, setTaskList] = useState([]);
   const [show, setShow] = useState(false);
   const [status, setStatus] = useState("All");
-  const [singleStatus,setSingleStatus] = useState('')
+  const [singleStatus, setSingleStatus] = useState("");
   const [sortBy, setSortBy] = useState("");
-  const [search,setSearch] = useState("")
+  const [search, setSearch] = useState("");
+  const [action,setAction] = useState('')
   const [task, setTask] = useState({
-    id:"",
+    id: "",
     title: "",
     body: "",
   });
+  
+  const {token} = useAuthContext()
 
-
+  const storedToken = localStorage.getItem("token");
 
   const fetchTasks = () =>
-    fetch(base + `/task?sort=${sortBy}&status=${status}`)
+    fetch(base + `/task?sort=${sortBy}&status=${status}`, {
+      headers: {
+        authorization: `Bearer ${token?token:storedToken}`,
+      },
+    })
       .then(async (res) => {
         if (res.ok) return res.json();
         else {
@@ -35,22 +43,62 @@ export const TaskContextProvider = ({ children }) => {
         toast.error(error.message || "An error occurred while fetching tasks");
       });
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
   return (
     <taskContext.Provider
-      value={{ taskList, fetchTasks, show, setShow,task,setTask,status,setStatus ,sortBy,setSortBy,singleStatus,setSingleStatus}}
+      value={{
+        taskList,
+        fetchTasks,
+        show,
+        setShow,
+        task,
+        setTask,
+        status,
+        setStatus,
+        sortBy,
+        setSortBy,
+        singleStatus,
+        setSingleStatus,
+        action,
+        setAction
+      }}
     >
       {children}
     </taskContext.Provider>
   );
 };
 
-
 export const useTaskContext = () => {
-  const { taskList, fetchTasks, show, setShow, task,setTask,status,setStatus,sortBy,setSortBy,singleStatus,setSingleStatus } =
-    useContext(taskContext);
-  return { taskList, fetchTasks, show, setShow ,task,setTask,status,setStatus,sortBy,setSortBy,singleStatus,setSingleStatus};
+  const {
+    taskList,
+    fetchTasks,
+    show,
+    setShow,
+    task,
+    setTask,
+    status,
+    setStatus,
+    sortBy,
+    setSortBy,
+    singleStatus,
+    setSingleStatus,
+    action,
+    setAction
+  } = useContext(taskContext);
+  return {
+    taskList,
+    fetchTasks,
+    show,
+    setShow,
+    task,
+    setTask,
+    status,
+    setStatus,
+    sortBy,
+    setSortBy,
+    singleStatus,
+    setSingleStatus,
+    action,
+    setAction
+  };
 };
