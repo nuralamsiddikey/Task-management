@@ -10,7 +10,7 @@ taskRouter.post("/", async (req, res) => {
       title,
       body,
       status,
-      user: "660ee6d0b06f7c9faab05550",
+      user: req.user.id,
     });
     await task.save();
     res.status(201).json({ message: "Successfully created task" });
@@ -43,7 +43,7 @@ taskRouter.get("/", async (req, res) => {
       .skip((page - 1) * limit)
       .sort({ createdAt: sort })
       .exec();
-
+      
     res.json({
       totalPosts,
       totalPages,

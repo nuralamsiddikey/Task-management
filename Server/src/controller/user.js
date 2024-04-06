@@ -64,6 +64,7 @@ userRouter.post("/login", async (req, res) => {
       message: "Login success",
       token: token,
       fullName: existUser.fullName,
+      image: existUser.image
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

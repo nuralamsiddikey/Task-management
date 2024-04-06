@@ -1,5 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+import path from 'path'
 import cors from "cors";
 const app = express();
 const port = 4000;
@@ -17,7 +21,14 @@ main()
   .then(() => console.log("DBConnection success"))
   .catch((error) => console.log("DBConnection failed!!", error));
 
+ 
 
+  
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  
+
+  app.use(express.static(path.join(__dirname, "./uploads")));
 
 import { taskRouter } from "./src/controller/task.js";
 import { userRouter } from "./src/controller/user.js";

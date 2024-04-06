@@ -52,6 +52,7 @@ export const Signin = () => {
           setToken(result.token)
           localStorage.setItem("token", result.token);
           localStorage.setItem("fullName", result.fullName);
+          localStorage.setItem("image", result.image);
           navigate("/");
         })
         .catch((error) => {

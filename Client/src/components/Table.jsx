@@ -50,11 +50,12 @@ export const Table = () => {
 
   return (
     <div className="table-responsive  p-3 bg-white rounded-3 mt-2">
-      <table className="table table-hover table-borderless">
+      <table className="table table-hover table-borderless text-center">
         <thead className="text-secondary">
           <tr>
             <th className="align-middle text-secondary">Date</th>
             <th className="align-middle text-secondary">Task</th>
+            <th className="align-middle text-secondary">Assigned</th>
             <th className="align-middle text-secondary">Status</th>
             <th className="align-middle text-secondary">Action</th>
           </tr>
@@ -74,7 +75,7 @@ export const Table = () => {
                 className="py-3 align-middle text-secondary  align-middle"
               >
                 <div
-                  className="d-inline-block cursor-pointer"
+                  className="d-inline-block cursor-pointer border rounded-4 p-3"
                   onClick={() => {
                     setShow(true);
                     setTask({
@@ -87,12 +88,12 @@ export const Table = () => {
                   }}
                 >
                   <p>
-                    {data.title}
+                    <span className="me-4 fw-bold">{data.title}</span>
                     {hoverIndex === index && (
                       <RiEdit2Line
-                        className="ml-2"
-                        size={20}
-                        color=""
+                        className="ml-5 bg-primary rounded-circle p-2"
+                        size={30}
+                        color="white"
                         style={{ transition: "all 0.8s ease" }}
                       />
                     )}
@@ -105,7 +106,7 @@ export const Table = () => {
                   </span>
                 </div>
               </td>
-
+              <td className="align-middle text-secondary">{data.user.fullName}</td>
               <td className="align-middle text-secondary">{data.status}</td>
               <td className="align-middle text-secondary">
                 <RiDeleteBin6Fill
@@ -120,7 +121,7 @@ export const Table = () => {
           ))}
         </tbody>
       </table>
-      <nav aria-label="Page navigation example" className="mt-5">
+      <nav aria-label="Page navigation example" className="mt-5 d-flex justify-content-end">
         <ul className="pagination">
           <li className="page-item">
             <a className="page-link" href="#">
