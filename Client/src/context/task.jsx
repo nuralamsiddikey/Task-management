@@ -8,6 +8,7 @@ export const TaskContextProvider = ({ children }) => {
   const [taskList, setTaskList] = useState([]);
   const [show, setShow] = useState(false);
   const [status, setStatus] = useState("All");
+  const [singleStatus,setSingleStatus] = useState('')
   const [sortBy, setSortBy] = useState("");
   const [search,setSearch] = useState("")
   const [task, setTask] = useState({
@@ -40,7 +41,7 @@ export const TaskContextProvider = ({ children }) => {
 
   return (
     <taskContext.Provider
-      value={{ taskList, fetchTasks, show, setShow,task,setTask,status,setStatus ,sortBy,setSortBy}}
+      value={{ taskList, fetchTasks, show, setShow,task,setTask,status,setStatus ,sortBy,setSortBy,singleStatus,setSingleStatus}}
     >
       {children}
     </taskContext.Provider>
@@ -49,7 +50,7 @@ export const TaskContextProvider = ({ children }) => {
 
 
 export const useTaskContext = () => {
-  const { taskList, fetchTasks, show, setShow, task,setTask,status,setStatus,sortBy,setSortBy } =
+  const { taskList, fetchTasks, show, setShow, task,setTask,status,setStatus,sortBy,setSortBy,singleStatus,setSingleStatus } =
     useContext(taskContext);
-  return { taskList, fetchTasks, show, setShow ,task,setTask,status,setStatus,sortBy,setSortBy};
+  return { taskList, fetchTasks, show, setShow ,task,setTask,status,setStatus,sortBy,setSortBy,singleStatus,setSingleStatus};
 };

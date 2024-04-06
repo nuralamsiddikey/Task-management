@@ -9,7 +9,7 @@ import { base } from "../api";
 import { useTaskContext } from "../context/task";
 
 export const AddTask = () => {
-  const { fetchTasks, show, setShow, status, setStatus, task, setTask } =
+  const { fetchTasks, show, setShow, status, setStatus, task, setTask,singleStatus,setSingleStatus } =
     useTaskContext();
 
   const handleChange = (event) => {
@@ -54,7 +54,7 @@ export const AddTask = () => {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({ ...task, status }),
+      body: JSON.stringify({ ...task, status: singleStatus }),
     })
       .then(async (res) => {
         if (res.ok) return res.json();
@@ -73,7 +73,7 @@ export const AddTask = () => {
         toast.error(error.message);
       });
 
-  const handleStatus = (status) => setStatus(status);
+  const handleStatus = (status) => setSingleStatus(status);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -129,7 +129,7 @@ export const AddTask = () => {
               className="bg-white shadow-sm text-dark  w-100 text-start"
               id="dropdown-basic"
             >
-              {status}
+              {singleStatus}
             </Dropdown.Toggle>
             <Dropdown.Menu className="border-0 shadow w-100">
               <Dropdown.Item onClick={() => handleStatus("In Progress")}>

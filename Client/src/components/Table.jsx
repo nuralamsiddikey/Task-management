@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
 export const Table = () => {
-  const { taskList, fetchTasks, setShow, setTask,setStatus } = useTaskContext();
+  const { taskList, fetchTasks, setShow, setTask,setSingleStatus } = useTaskContext();
   const [hoverIndex, setHoverIndex] = useState(null);
 
   const handleDelete = (id) => {
@@ -76,7 +76,7 @@ export const Table = () => {
                       title: data.title,
                       body: data.body,
                     });
-                    setStatus(data.status)
+                    setSingleStatus(data.status)
                   }}
                 >
                   <p>
