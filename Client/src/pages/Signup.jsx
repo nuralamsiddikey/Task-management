@@ -1,17 +1,22 @@
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
-import { FiLogIn } from "react-icons/fi";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { base } from "../api";
+import imgIcon from "../assets/image.png";
+import { Button } from "react-bootstrap";
 
 export const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [loginInfo, setLoginInfo] = useState({
+  const [imgPreview, setImgPreview] = useState();
+  const [userInfo, setUserInfo] = useState({
     fullName: "",
     email: "",
     password: "",
+    image: "",
   });
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -19,20 +24,66 @@ export const Signup = () => {
 
   const handleInput = (event) => {
     const { name, value } = event.target;
-    setLoginInfo((prevValue) => ({
-      ...prevValue,
-      [name]: value,
-    }));
+    if (name === "image") {
+      setUserInfo((prevValue) => ({
+        ...prevValue,
+        [name]: event.target?.files[0],
+      }));
+      setImgPreview(URL.createObjectURL(event.target?.files[0]));
+    } else
+      setUserInfo((prevValue) => ({
+        ...prevValue,
+        [name]: value,
+      }));
+  };
+
+
+  const handleSubmit = () => {
+    if (!userInfo.fullName) toast.error("Full name required");
+    else if (!userInfo.email) toast.error("Email required");
+    else if (userInfo.password.length < 6)
+      toast.error("Password must be 6 character long");
+    else if (!userInfo.image) toast.error("Required profile image");
+    else {
+      const formData = new FormData();
+      formData.append("fullName", userInfo.fullName);
+      formData.append("email", userInfo.email);
+      formData.append("password", userInfo.password);
+      formData.append("image", userInfo.image);
+
+      fetch(base + "/user", {
+        method: "POST",
+        body: formData,
+      })
+        .then(async (res) => {
+          if (res.ok) return res.json();
+          else {
+            const data = await res.json();
+            throw new Error(data.error);
+          }
+        })
+        .then((result) => {
+          toast.success(result.message);
+          navigate("/signin");
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    }
   };
 
   return (
     <>
-      <div className="d-flex justify-content-center py-5">
-        <div className="bg-white d-flex justify-content-center mt-5 rounded-3 shadow p-5">
-          <div>
-            <p className="text-center fw-bold fs-3">SIGN UP</p>
+      <div className="w-50 m-auto mt-5 border p-4 rounded">
+        <p className="text-center fw-bold fs-3">Sign Up</p>
+        <div className="row">
+          <div className="col-7">
             <Form.Label htmlFor="fullName">Full Name</Form.Label>
-            <Form.Control name="email" onChange={handleInput} id="fullName" />
+            <Form.Control
+              name="fullName"
+              onChange={handleInput}
+              id="fullName"
+            />
             <Form.Label htmlFor="email" className="mt-3">
               Email
             </Form.Label>
@@ -59,15 +110,40 @@ export const Signup = () => {
                 </span>
               </div>
             </div>
-            <button
-              className="btn btn-primary mt-4 w-100"
-              // onClick={handleLogin}
-            >
-               Submit
-            </button>
-             <Link to="/signin" className="d-inline-block mt-3 text-decoration-none">back to login</Link>
+
+            <Button className="mt-4 w-100 bg-submit" onClick={handleSubmit}>
+              Submit
+            </Button>
+          </div>
+
+          <div className="col-5">
+            <p>Image</p>
+            <label className="ps-5 rounded-lg">
+              <img
+                htmlFor="image"
+                width="170"
+                src={imgPreview ? imgPreview : imgIcon}
+                alt="image"
+                className="img-fluid object-fit-cover  rounded cursor-pointer mt-2"
+                style={{
+                  borderStyle: `${imgPreview ? "dotted" : ""}`,
+                  borderWidth: "2px",
+                  borderColor: "gray",
+                }}
+              />
+              <input
+                type="file"
+                name="image"
+                id="image"
+                className="d-none"
+                onChange={handleInput}
+              />
+            </label>
           </div>
         </div>
+        <Link to="/signin" className="d-inline-block mt-3 text-decoration-none">
+          back to login
+        </Link>
       </div>
     </>
   );

@@ -19,8 +19,8 @@ main()
 
 
 
-import { taskRouter } from "./controller/task.js";
-import { userRouter } from "./controller/user.js";
+import { taskRouter } from "./src/controller/task.js";
+import { userRouter } from "./src/controller/user.js";
 app.use("/task",taskRouter)
 app.use("/user",userRouter)
 
