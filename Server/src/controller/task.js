@@ -27,9 +27,6 @@ taskRouter.get("/", async (req, res) => {
   let sort = -1;
 
   try {
-    const totalPosts = await Task.countDocuments();
-    const totalPages = Math.ceil(totalPosts / limit);
-
     if (sortby === "Ascending") sort = 1;
 
     let query = {};
@@ -37,13 +34,16 @@ taskRouter.get("/", async (req, res) => {
       query.status = status;
     }
 
+    const totalPosts = await Task.countDocuments(query);
+    const totalPages = Math.ceil(totalPosts / limit);
+
     const tasks = await Task.find(query)
       .populate("user", "-password")
       .limit(limit)
       .skip((page - 1) * limit)
       .sort({ createdAt: sort })
       .exec();
-      
+
     res.json({
       totalPosts,
       totalPages,
