@@ -20,7 +20,7 @@ taskRouter.post("/", async (req, res) => {
 });
 
 taskRouter.get("/", async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
+  const page = parseInt(req.query.currentPage) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const sortby = req.query.sort || "Descending";
   const status = req.query.status || "All";

@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { Form, Modal } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import { CiFilter } from "react-icons/ci";
 import { Header } from "../components/Navbar";
@@ -11,17 +9,13 @@ import { Table } from "../components/Table";
 import { useTaskContext } from "../context/task";
 
 export default function Task() {
-  const { sortBy, setSortBy, fetchTasks, status, setStatus } = useTaskContext();
-
-  useEffect(() => {
-    fetchTasks();
-  }, [sortBy, status]);
+  const { sortBy, setSortBy, status, setStatus } = useTaskContext();
 
   const handleStatus = (status) => setStatus(status);
   const handleSort = (sort) => setSortBy(sort);
 
   return (
-    <div className="container">
+    <div className="container mb-5">
       <Header />
       <div className="shadow-sm mt-4 px-5 py-4 rounded">
         <div className="d-flex justify-content-between my-3">

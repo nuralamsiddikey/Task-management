@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiDeleteBin6Fill, RiEdit2Line } from "react-icons/ri";
 import Pagination from "react-bootstrap/Pagination";
 import { useTaskContext } from "../context/task";
@@ -8,10 +8,21 @@ import Swal from "sweetalert2";
 import { useAuthContext } from "../context/auth";
 
 export const Table = () => {
-  const { taskList, fetchTasks, setShow, setTask,setSingleStatus,setAction } = useTaskContext();
+  const {
+    taskList,
+    fetchTasks,
+    setShow,
+    setTask,
+    setSingleStatus,
+    setAction,
+    totalPages,
+    currentPage,
+    setCurrentPage,
+    setLimit,
+    totalTasks
+  } = useTaskContext();
   const [hoverIndex, setHoverIndex] = useState(null);
   const token = localStorage.getItem("token");
-
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -27,8 +38,8 @@ export const Table = () => {
         fetch(base + `/task/${id}`, {
           method: "DELETE",
           headers: {
-            authorization: `Bearer ${token}`
-          }
+            authorization: `Bearer ${token}`,
+          },
         })
           .then(async (res) => {
             if (res.ok) return res.json();
@@ -48,8 +59,28 @@ export const Table = () => {
     });
   };
 
+  const genereatePagesItems = () => {
+    const div = [];
+    for (let i = 1; i <= totalPages; i++) {
+      div.push(
+        <li className={`page-item ${currentPage === i ? "active" : ""}`}>
+          <a className="page-link" onClick={() => setCurrentPage(i)}>
+          
+            {i}
+          </a>
+        </li>
+      );
+    }
+    return div;
+  };
+
+  const handleLimit = (event)=>{
+      const {value} = event.target
+      setLimit(value)
+  }
+
   return (
-    <div className="table-responsive  p-3 bg-white rounded-3 mt-2">
+    <div className="table-responsive  p-3 bg-white rounded-3 mt-2 text-nowrap">
       <table className="table table-hover table-borderless text-center">
         <thead className="text-secondary">
           <tr>
@@ -83,21 +114,23 @@ export const Table = () => {
                       title: data.title,
                       body: data.body,
                     });
-                    setSingleStatus(data.status)
-                    setAction('edit')
+                    setSingleStatus(data.status);
+                    setAction("edit");
                   }}
                 >
-                  <p>
-                    <span className="me-4 fw-bold">{data.title}</span>
-                    {hoverIndex === index && (
-                      <RiEdit2Line
-                        className="ml-5 bg-primary rounded-circle p-2"
-                        size={30}
-                        color="white"
-                        style={{ transition: "all 0.8s ease" }}
-                      />
-                    )}
-                  </p>
+                  <div className="row">
+                    <p className="fw-bold col-8">{data.title}</p>
+                    <div className="col-4">
+                      {hoverIndex === index && (
+                        <RiEdit2Line
+                          className="bg-primary rounded-circle p-2"
+                          size={30}
+                          color="white"
+                          style={{ transition: "all 0.8s ease" }}
+                        />
+                      )}
+                    </div>
+                  </div>
 
                   <span>
                     {data.body.length > 40
@@ -106,7 +139,7 @@ export const Table = () => {
                   </span>
                 </div>
               </td>
-              <td className="align-middle text-secondary">{data.user.fullName}</td>
+              <td className="align-middle text-secondary">{data.user.email}</td>
               <td className="align-middle text-secondary">{data.status}</td>
               <td className="align-middle text-secondary">
                 <RiDeleteBin6Fill
@@ -121,35 +154,21 @@ export const Table = () => {
           ))}
         </tbody>
       </table>
-      <nav aria-label="Page navigation example" className="mt-5 d-flex justify-content-end">
-        <ul className="pagination">
-          <li className="page-item">
-            <a className="page-link" href="#">
-              Previous
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              1
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              2
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              3
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              Next
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <div className="mt-5 d-flex justify-content-between">
+        <div className="d-flex align-items-center gap-3">
+          <p className="m-0">Items per page</p>
+          <select class="form-select" aria-label="Default select example" onChange={handleLimit}>
+            <option selected value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+          {`${taskList.length}/${totalTasks}`}
+        </div>
+        <nav aria-label="Page navigation example">
+          <ul className="pagination">{genereatePagesItems()}</ul>
+        </nav>
+      </div>
     </div>
   );
 };

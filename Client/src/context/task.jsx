@@ -11,24 +11,32 @@ export const TaskContextProvider = ({ children }) => {
   const [status, setStatus] = useState("All");
   const [singleStatus, setSingleStatus] = useState("");
   const [sortBy, setSortBy] = useState("");
-  const [search, setSearch] = useState("");
-  const [action,setAction] = useState('')
+  const [action, setAction] = useState("");
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalTasks,setTotalTasks] = useState(0)
+
   const [task, setTask] = useState({
     id: "",
     title: "",
     body: "",
   });
-  
-  const {token} = useAuthContext()
+
+  const { token } = useAuthContext();
 
   const storedToken = localStorage.getItem("token");
 
   const fetchTasks = () =>
-    fetch(base + `/task?sort=${sortBy}&status=${status}`, {
-      headers: {
-        authorization: `Bearer ${token?token:storedToken}`,
-      },
-    })
+    fetch(
+      base +
+        `/task?sort=${sortBy}&status=${status}&currentPage=${currentPage}&limit=${limit}`,
+      {
+        headers: {
+          authorization: `Bearer ${token ? token : storedToken}`,
+        },
+      }
+    )
       .then(async (res) => {
         if (res.ok) return res.json();
         else {
@@ -38,11 +46,17 @@ export const TaskContextProvider = ({ children }) => {
       })
       .then((result) => {
         setTaskList(result?.data);
+        setTotalPages(result.totalPages);
+        setCurrentPage(result.currentPage);
+        setTotalTasks(result.totalPosts)
       })
       .catch((error) => {
         toast.error(error.message || "An error occurred while fetching tasks");
       });
 
+  useEffect(() => {
+    fetchTasks();
+  }, [currentPage, sortBy, status, limit]);
 
   return (
     <taskContext.Provider
@@ -60,7 +74,13 @@ export const TaskContextProvider = ({ children }) => {
         singleStatus,
         setSingleStatus,
         action,
-        setAction
+        setAction,
+        totalPages,
+        currentPage,
+        setCurrentPage,
+        limit,
+        setLimit,
+        totalTasks
       }}
     >
       {children}
@@ -83,7 +103,13 @@ export const useTaskContext = () => {
     singleStatus,
     setSingleStatus,
     action,
-    setAction
+    setAction,
+    totalPages,
+    currentPage,
+    setCurrentPage,
+    limit,
+    setLimit,
+    totalTasks
   } = useContext(taskContext);
   return {
     taskList,
@@ -99,6 +125,12 @@ export const useTaskContext = () => {
     singleStatus,
     setSingleStatus,
     action,
-    setAction
+    setAction,
+    totalPages,
+    currentPage,
+    setCurrentPage,
+    limit,
+    setLimit,
+    totalTasks
   };
 };
