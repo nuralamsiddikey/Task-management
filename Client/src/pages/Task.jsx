@@ -24,8 +24,8 @@ export default function Task() {
     <div className="">
       <Header />
       <div className="container  mt-4 px-5 py-2 rounded">
-        <div className="d-flex justify-content-between my-3">
-          <div className="d-flex align-items-center gap-4">
+        <div className="d-sm-flex  justify-content-between my-3">
+          <div className="d-flex align-items-center gap-4 mb-1 mb-sm-0">
             <Dropdown>
               <Dropdown.Toggle
                 className="bg-white shadow-sm text-dark"

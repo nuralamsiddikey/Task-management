@@ -76,11 +76,8 @@ export const Signup = () => {
   };
 
   return (
-    <>
-      <div
-        className="m-auto mt-5 border bg-white p-4 rounded"
-        style={{ width: "550px" }}
-      >
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="bg-white p-4 rounded border">
         <p className="text-center fw-bold fs-3">Sign Up</p>
         <div className="row">
           <div className="col-7">
@@ -117,17 +114,21 @@ export const Signup = () => {
               </div>
             </div>
 
-            <Button className="mt-4 w-100 bg-submit d-flex justify-content-center align-items-center gap-1" onClick={handleSubmit}>
-               {loading?<Loader /> :''}<span> Submit</span>
+            <Button
+              className="mt-4 w-100 bg-submit d-flex justify-content-center align-items-center gap-1"
+              onClick={handleSubmit}
+            >
+              {loading ? <Loader /> : ""}
+              <span> Submit</span>
             </Button>
           </div>
 
           <div className="col-5">
             <p>Image</p>
-            <label className="ps-5 rounded-lg">
+            <label className="rounded-lg">
               <img
                 htmlFor="image"
-                width="170"
+                width="120"
                 src={imgPreview ? imgPreview : imgIcon}
                 alt="image"
                 className="img-fluid object-fit-cover  rounded cursor-pointer mt-2"
@@ -151,6 +152,6 @@ export const Signup = () => {
           back to login
         </Link>
       </div>
-    </>
+    </div>
   );
 };

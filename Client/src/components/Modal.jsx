@@ -104,7 +104,7 @@ export const AddTask = () => {
   return (
     <>
       <button
-        className="d-flex align-items-center gap-1 btn btn-outline-primary"
+        className="d-flex  text-nowrap align-items-center gap-1 btn btn-outline-primary"
         onClick={() => {
           setTask({ title: "", body: "" });
           setSingleStatus("Todo");
@@ -189,7 +189,7 @@ export const AddTask = () => {
                 className="btn bg-submit text-white border"
                 onClick={handleEdit}
               >
-                {loading?<Loader/> :''} <span>Confirm edit</span>
+                {loading?<Loader/> :''} <span>Update</span>
               </Button>
             ) : (
               <Button

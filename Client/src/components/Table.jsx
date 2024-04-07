@@ -90,15 +90,14 @@ export const Table = () => {
     return div;
   };
 
-
-  const handlePrev = ()=>{
-      setCurrentPage(currentPage-1)
-  }
-  const handleNext = ()=>{
-    if(currentPage<totalPages){
-      setCurrentPage(currentPage+1)
+  const handlePrev = () => {
+    setCurrentPage(currentPage - 1);
+  };
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
     }
-  }
+  };
 
   const handleLimit = (event) => {
     const { value } = event.target;
@@ -129,10 +128,11 @@ export const Table = () => {
               </td>
               <td
                 title="View details"
-                className="py-3 align-middle text-secondary  align-middle"
+                className="py-3 align-middle text-secondary  align-middle text-wrap"
               >
                 <div
-                  className="d-inline-block cursor-pointer border rounded-4 p-3 position-relative"
+                  className="d-inline-block cursor-pointer border rounded-4 p-3 text-start position-relative"
+                  style={{minWidth:'300px'}}
                   onClick={() => {
                     setShow(true);
                     setTask({
@@ -144,8 +144,12 @@ export const Table = () => {
                     setAction("edit");
                   }}
                 >
-                  <div className="row ">
-                    <p className="fw-bold col-8">{data.title}</p>
+                  <div className="row">
+                  <p className="fw-bold">
+                    {data.title.length > 50
+                      ? `${data.title.slice(0, 50)}...`
+                      : data.title}
+                  </p>
                     <div className="col-4 position-absolute  top-0 end-0">
                       {hoverIndex === index && (
                         <RiEdit2Line
@@ -159,8 +163,8 @@ export const Table = () => {
                   </div>
 
                   <span>
-                    {data.body.length > 40
-                      ? `${data.body.slice(0, 40)}...`
+                    {data.body.length > 50
+                      ? `${data.body.slice(0, 50)}...`
                       : data.body}
                   </span>
                 </div>
@@ -194,8 +198,8 @@ export const Table = () => {
           ))}
         </tbody>
       </table>
-      <div className="mt-5 d-flex justify-content-between">
-        <div className="d-flex align-items-center gap-3">
+      <div className="mt-5 d-sm-flex justify-content-between align-items-center">
+        <div className="d-flex align-items-center gap-3 mb-1">
           <p className="m-0">Items per page</p>
           <select
             class="form-select"
@@ -209,10 +213,12 @@ export const Table = () => {
             <option value={50}>50</option>
             <option value={100}>100</option>
           </select>
-          {`${taskList.length}/${totalTasks}`}
+          <span> {`${taskList.length}/${totalTasks}`}</span>
         </div>
         <nav aria-label="Page navigation example">
-          <ul className="pagination user-select-none">{genereatePagesItems()}</ul>
+          <ul className="pagination user-select-none m-0">
+            {genereatePagesItems()}
+          </ul>
         </nav>
       </div>
     </div>

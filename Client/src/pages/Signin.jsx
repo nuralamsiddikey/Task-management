@@ -67,11 +67,8 @@ export const Signin = () => {
   };
 
   return (
-    <>
-      <div
-        className="m-auto border mt-5 p-4 rounded bg-white"
-        style={{ width: "340px" }}
-      >
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="border p-4 rounded bg-white" style={{ width: "340px" }}>
         <p className="text-center fw-bold fs-3">Sign In</p>
         <Form.Label htmlFor="email">Email</Form.Label>
         <Form.Control name="email" onChange={handleInput} id="email" />
@@ -109,6 +106,6 @@ export const Signin = () => {
           Registration?
         </Link>
       </div>
-    </>
+    </div>
   );
 };
