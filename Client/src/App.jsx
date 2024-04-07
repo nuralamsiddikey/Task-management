@@ -11,7 +11,7 @@ function App() {
   
 
   return (
-    <>
+    <div className=' h-auto pb-5 min-vh-100'>
       <BrowserRouter>
          <Routes>
             <Route path='/' element={<PrivateRoute><Task/></PrivateRoute>}/>
@@ -19,7 +19,7 @@ function App() {
              <Route path='/signup' element={<Signup/>}/>
          </Routes>
       </BrowserRouter>
-    </>
+    </div>
   )
 }
 

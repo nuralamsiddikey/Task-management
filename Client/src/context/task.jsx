@@ -15,7 +15,8 @@ export const TaskContextProvider = ({ children }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [totalTasks,setTotalTasks] = useState(0)
+  const [totalTasks, setTotalTasks] = useState(0);
+  const [loading,setLoading] = useState(false)
 
   const [task, setTask] = useState({
     id: "",
@@ -27,7 +28,8 @@ export const TaskContextProvider = ({ children }) => {
 
   const storedToken = localStorage.getItem("token");
 
-  const fetchTasks = () =>
+  const fetchTasks = () =>{
+    setLoading(true)
     fetch(
       base +
         `/task?sort=${sortBy}&status=${status}&currentPage=${currentPage}&limit=${limit}`,
@@ -48,14 +50,17 @@ export const TaskContextProvider = ({ children }) => {
         setTaskList(result?.data);
         setTotalPages(result.totalPages);
         setCurrentPage(result.currentPage);
-        setTotalTasks(result.totalPosts)
+        setTotalTasks(result.totalPosts);
+        setLoading(false)
       })
       .catch((error) => {
         toast.error(error.message || "An error occurred while fetching tasks");
       });
+  }
+   
 
   useEffect(() => {
-    fetchTasks();
+     fetchTasks();
   }, [currentPage, sortBy, status, limit]);
 
   return (
@@ -80,13 +85,15 @@ export const TaskContextProvider = ({ children }) => {
         setCurrentPage,
         limit,
         setLimit,
-        totalTasks
+        totalTasks,
+        loading
       }}
     >
       {children}
     </taskContext.Provider>
   );
 };
+
 
 export const useTaskContext = () => {
   const {
@@ -109,7 +116,8 @@ export const useTaskContext = () => {
     setCurrentPage,
     limit,
     setLimit,
-    totalTasks
+    totalTasks,
+    loading
   } = useContext(taskContext);
   return {
     taskList,
@@ -131,6 +139,7 @@ export const useTaskContext = () => {
     setCurrentPage,
     limit,
     setLimit,
-    totalTasks
+    totalTasks,
+    loading
   };
 };

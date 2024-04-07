@@ -7,16 +7,18 @@ import { FiLogIn } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { base } from "../api";
 import { useAuthContext } from "../context/auth";
+import Loader from "../components/Loader";
 
 export const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
   });
 
   const navigate = useNavigate();
-  const {setToken} = useAuthContext()
+  const { setToken } = useAuthContext();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -34,6 +36,7 @@ export const Signin = () => {
     if (!loginInfo.email) toast.error("Email missing!");
     else if (!loginInfo.password) toast.error("Password missing");
     else {
+      setLoading(true);
       fetch(base + "/user/login", {
         method: "POST",
         headers: {
@@ -49,22 +52,26 @@ export const Signin = () => {
           }
         })
         .then((result) => {
-          setToken(result.token)
+          setToken(result.token);
           localStorage.setItem("token", result.token);
           localStorage.setItem("fullName", result.fullName);
           localStorage.setItem("image", result.image);
           navigate("/");
+          setLoading(false);
         })
         .catch((error) => {
           toast.error(error.message);
-        });
+        })
+        .finally(() => setLoading(false));
     }
   };
 
-
   return (
     <>
-      <div className="w-25 m-auto mt-5 border p-4 rounded">
+      <div
+        className="m-auto border mt-5 p-4 rounded bg-white"
+        style={{ width: "340px" }}
+      >
         <p className="text-center fw-bold fs-3">Sign In</p>
         <Form.Label htmlFor="email">Email</Form.Label>
         <Form.Control name="email" onChange={handleInput} id="email" />
@@ -91,10 +98,11 @@ export const Signin = () => {
           </div>
         </div>
         <Button
-          className="bg-submit mt-4 rounded-2 w-100"
+          className="bg-submit mt-4 rounded-2 w-100 d-flex justify-content-center align-items-center gap-1"
           onClick={handleLogin}
         >
-          <FiLogIn /> SIGN IN
+          <span> {loading ? <Loader /> : <FiLogIn />}</span>
+          <span> SIGN IN</span>
         </Button>
 
         <Link to="/signup" className="mt-3 d-inline-block text-decoration-none">

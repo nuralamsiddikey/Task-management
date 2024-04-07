@@ -7,6 +7,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import toast from "react-hot-toast";
 import { base } from "../api";
 import { useTaskContext } from "../context/task";
+import Loader from "./Loader";
 
 
 export const AddTask = () => {
@@ -24,6 +25,7 @@ export const AddTask = () => {
     action,
   } = useTaskContext();
   const token = localStorage.getItem("token");
+  const [loading,setLoading] = useState(false)
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -32,7 +34,9 @@ export const AddTask = () => {
 
   const handleSubmit = () => {
     if (!task.title) return toast.error("Title  missing!!");
+    
     else {
+      setLoading(true)
       fetch(base + "/task", {
         method: "POST",
         headers: {
@@ -54,15 +58,17 @@ export const AddTask = () => {
           setSingleStatus("Todo");
           setTask({ title: "", body: "" });
           handleClose();
+          setLoading(false)
         })
         .catch((error) => {
           console.error("Error occurred:", error);
           toast.error(error.message);
         });
     }
-  };
+  }
 
-  const handleEdit = () =>
+  const handleEdit = () =>{
+    setLoading(true)
     fetch(base + `/task/${task.id}`, {
       method: "PUT",
       headers: {
@@ -82,11 +88,14 @@ export const AddTask = () => {
         toast.success(result.message);
         fetchTasks();
         handleClose();
+        setLoading(false)
       })
       .catch((error) => {
         console.error("Error occurred:", error);
         toast.error(error.message);
       });
+  }
+    
 
   const handleStatus = (status) => setSingleStatus(status);
   const handleClose = () => setShow(false);
@@ -180,14 +189,14 @@ export const AddTask = () => {
                 className="btn bg-submit text-white border"
                 onClick={handleEdit}
               >
-                Edit
+                {loading?<Loader/> :''} <span>Confirm edit</span>
               </Button>
             ) : (
               <Button
-                className="btn bg-submit text-white border"
+                className="btn bg-submit text-white border d-flex align-items-center gap-1"
                 onClick={handleSubmit}
               >
-                Submit
+                {loading?<Loader/> :''} <span>Submit</span>
               </Button>
             )}
           </div>

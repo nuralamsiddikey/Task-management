@@ -106,7 +106,7 @@ export const Table = () => {
   };
 
   return (
-    <div className="table-responsive  p-3 bg-white rounded-3 mt-2 text-nowrap">
+    <div className="table-responsive  p-3 bg-white rounded-4 mt-2 text-nowrap shadow-sm">
       <table className="table table-hover table-borderless text-center">
         <thead className="text-secondary">
           <tr>

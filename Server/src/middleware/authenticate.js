@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 export const IsAuthenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-
+  
     if (!authHeader)
       return res.status(401).json({
         error: "Access forbidden",
@@ -23,7 +23,6 @@ export const IsAuthenticate = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };

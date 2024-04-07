@@ -7,17 +7,23 @@ import { GoSortAsc } from "react-icons/go";
 import { GoSortDesc } from "react-icons/go";
 import { Table } from "../components/Table";
 import { useTaskContext } from "../context/task";
+import { useEffect } from "react";
+import Loader from "../components/Loader";
 
 export default function Task() {
-  const { sortBy, setSortBy, status, setStatus } = useTaskContext();
+  const { sortBy, setSortBy, status, setStatus, fetchTasks, loading } =
+    useTaskContext();
+
+  useEffect(() => fetchTasks(), []);
 
   const handleStatus = (status) => setStatus(status);
   const handleSort = (sort) => setSortBy(sort);
 
+  
   return (
-    <div className="container mb-5">
+    <div className="">
       <Header />
-      <div className="shadow-sm mt-4 px-5 py-4 rounded">
+      <div className="container  mt-4 px-5 py-2 rounded">
         <div className="d-flex justify-content-between my-3">
           <div className="d-flex align-items-center gap-4">
             <Dropdown>
@@ -70,7 +76,7 @@ export default function Task() {
           </div>
           <AddTask />
         </div>
-        <Table />
+        {loading ? <div className="text-center"><Loader/> </div> : <Table />}
       </div>
     </div>
   );

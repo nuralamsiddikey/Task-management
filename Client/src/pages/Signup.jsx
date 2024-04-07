@@ -6,10 +6,12 @@ import toast from "react-hot-toast";
 import { base } from "../api";
 import imgIcon from "../assets/image.png";
 import { Button } from "react-bootstrap";
+import Loader from "../components/Loader";
 
 export const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [imgPreview, setImgPreview] = useState();
+  const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({
     fullName: "",
     email: "",
@@ -37,7 +39,6 @@ export const Signup = () => {
       }));
   };
 
-
   const handleSubmit = () => {
     if (!userInfo.fullName) toast.error("Full name required");
     else if (!userInfo.email) toast.error("Email required");
@@ -45,6 +46,7 @@ export const Signup = () => {
       toast.error("Password must be 6 character long");
     else if (!userInfo.image) toast.error("Required profile image");
     else {
+      setLoading(true);
       const formData = new FormData();
       formData.append("fullName", userInfo.fullName);
       formData.append("email", userInfo.email);
@@ -68,13 +70,17 @@ export const Signup = () => {
         })
         .catch((error) => {
           toast.error(error.message);
-        });
+        })
+        .finally(() => setLoading(false));
     }
   };
 
   return (
     <>
-      <div className="w-50 m-auto mt-5 border p-4 rounded">
+      <div
+        className="m-auto mt-5 border bg-white p-4 rounded"
+        style={{ width: "550px" }}
+      >
         <p className="text-center fw-bold fs-3">Sign Up</p>
         <div className="row">
           <div className="col-7">
@@ -111,8 +117,8 @@ export const Signup = () => {
               </div>
             </div>
 
-            <Button className="mt-4 w-100 bg-submit" onClick={handleSubmit}>
-              Submit
+            <Button className="mt-4 w-100 bg-submit d-flex justify-content-center align-items-center gap-1" onClick={handleSubmit}>
+               {loading?<Loader /> :''}<span> Submit</span>
             </Button>
           </div>
 
