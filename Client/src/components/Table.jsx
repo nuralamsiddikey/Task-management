@@ -6,6 +6,8 @@ import { base } from "../api";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useAuthContext } from "../context/auth";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 export const Table = () => {
   const {
@@ -70,8 +72,33 @@ export const Table = () => {
         </li>
       );
     }
+    div.push(
+      <li className={`page-item`}>
+        <a className="page-link" onClick={handleNext}>
+          <MdOutlineKeyboardArrowRight />
+        </a>
+      </li>
+    );
+
+    div.unshift(
+      <li className={`page-item`}>
+        <a className="page-link" onClick={handlePrev}>
+          <MdKeyboardArrowLeft />
+        </a>
+      </li>
+    );
     return div;
   };
+
+
+  const handlePrev = ()=>{
+      setCurrentPage(currentPage-1)
+  }
+  const handleNext = ()=>{
+    if(currentPage<totalPages){
+      setCurrentPage(currentPage+1)
+    }
+  }
 
   const handleLimit = (event) => {
     const { value } = event.target;
@@ -141,7 +168,15 @@ export const Table = () => {
               <td className="align-middle text-secondary">{data.user.email}</td>
               <td className="align-middle">
                 <span
-                  className={`badge ${data.status === "Todo" ? "bg-info" : data.status ==="In Progress"?'bg-warning': data.status==="In Review"?'bg-danger':'bg-primary'}`}
+                  className={`badge ${
+                    data.status === "Todo"
+                      ? "bg-info"
+                      : data.status === "In Progress"
+                      ? "bg-warning"
+                      : data.status === "In Review"
+                      ? "bg-danger"
+                      : "bg-primary"
+                  }`}
                 >
                   {data.status}
                 </span>{" "}
@@ -177,7 +212,7 @@ export const Table = () => {
           {`${taskList.length}/${totalTasks}`}
         </div>
         <nav aria-label="Page navigation example">
-          <ul className="pagination">{genereatePagesItems()}</ul>
+          <ul className="pagination user-select-none">{genereatePagesItems()}</ul>
         </nav>
       </div>
     </div>
