@@ -137,7 +137,7 @@ export const AddTask = () => {
           </Form.Label>
           <Form.Control
             as="textarea"
-            rows={4}
+            rows={7}
             id="body"
             name="body"
             value={task.body}

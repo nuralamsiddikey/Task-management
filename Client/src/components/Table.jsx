@@ -19,7 +19,7 @@ export const Table = () => {
     currentPage,
     setCurrentPage,
     setLimit,
-    totalTasks
+    totalTasks,
   } = useTaskContext();
   const [hoverIndex, setHoverIndex] = useState(null);
   const token = localStorage.getItem("token");
@@ -65,7 +65,6 @@ export const Table = () => {
       div.push(
         <li className={`page-item ${currentPage === i ? "active" : ""}`}>
           <a className="page-link" onClick={() => setCurrentPage(i)}>
-          
             {i}
           </a>
         </li>
@@ -74,10 +73,10 @@ export const Table = () => {
     return div;
   };
 
-  const handleLimit = (event)=>{
-      const {value} = event.target
-      setLimit(value)
-  }
+  const handleLimit = (event) => {
+    const { value } = event.target;
+    setLimit(value);
+  };
 
   return (
     <div className="table-responsive  p-3 bg-white rounded-3 mt-2 text-nowrap">
@@ -106,7 +105,7 @@ export const Table = () => {
                 className="py-3 align-middle text-secondary  align-middle"
               >
                 <div
-                  className="d-inline-block cursor-pointer border rounded-4 p-3"
+                  className="d-inline-block cursor-pointer border rounded-4 p-3 position-relative"
                   onClick={() => {
                     setShow(true);
                     setTask({
@@ -118,15 +117,15 @@ export const Table = () => {
                     setAction("edit");
                   }}
                 >
-                  <div className="row">
+                  <div className="row ">
                     <p className="fw-bold col-8">{data.title}</p>
-                    <div className="col-4">
+                    <div className="col-4 position-absolute  top-0 end-0">
                       {hoverIndex === index && (
                         <RiEdit2Line
                           className="bg-primary rounded-circle p-2"
                           size={30}
                           color="white"
-                          style={{ transition: "all 0.8s ease" }}
+                          style={{ transition: "all 0.9s ease" }}
                         />
                       )}
                     </div>
@@ -140,7 +139,13 @@ export const Table = () => {
                 </div>
               </td>
               <td className="align-middle text-secondary">{data.user.email}</td>
-              <td className="align-middle text-secondary">{data.status}</td>
+              <td className="align-middle">
+                <span
+                  className={`badge ${data.status === "Todo" ? "bg-info" : data.status ==="In Progress"?'bg-warning': data.status==="In Review"?'bg-danger':'bg-primary'}`}
+                >
+                  {data.status}
+                </span>{" "}
+              </td>
               <td className="align-middle text-secondary">
                 <RiDeleteBin6Fill
                   onClick={() => handleDelete(data._id)}
@@ -157,8 +162,14 @@ export const Table = () => {
       <div className="mt-5 d-flex justify-content-between">
         <div className="d-flex align-items-center gap-3">
           <p className="m-0">Items per page</p>
-          <select class="form-select" aria-label="Default select example" onChange={handleLimit}>
-            <option selected value={10}>10</option>
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            onChange={handleLimit}
+          >
+            <option selected value={10}>
+              10
+            </option>
             <option value={20}>20</option>
             <option value={50}>50</option>
             <option value={100}>100</option>
