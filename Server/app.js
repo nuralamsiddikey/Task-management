@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import fs from "fs";
 
 import path from "path";
 import cors from "cors";
@@ -11,6 +12,16 @@ const port = 4000;
 app.use(cors());
 app.use(express.json());
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const imageFolderPath = path.join(__dirname, ".", "uploads");
+if (!fs.existsSync(imageFolderPath)) {
+  fs.mkdirSync(imageFolderPath);
+}
+
+
 async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/techzu");
 }
@@ -19,8 +30,7 @@ main()
   .then(() => console.log("DBConnection success"))
   .catch((error) => console.log("DBConnection failed!!", error));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
 
 app.use(express.static(path.join(__dirname, "./uploads")));
 
