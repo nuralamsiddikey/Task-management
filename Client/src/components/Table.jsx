@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { useAuthContext } from "../context/auth";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import Dropdown from "react-bootstrap/Dropdown";
 
 export const Table = () => {
   const {
@@ -20,6 +21,7 @@ export const Table = () => {
     totalPages,
     currentPage,
     setCurrentPage,
+    limit,
     setLimit,
     totalTasks,
   } = useTaskContext();
@@ -99,9 +101,8 @@ export const Table = () => {
     }
   };
 
-  const handleLimit = (event) => {
-    const { value } = event.target;
-    setLimit(value);
+  const handleLimit = (limit) => {
+    setLimit(limit);
   };
 
   return (
@@ -198,21 +199,36 @@ export const Table = () => {
           ))}
         </tbody>
       </table>
+      {taskList.length<1? <p className="fw-bold text-secondary text-center mt-5">No task found.</p>:''}
+
       <div className="mt-5 d-sm-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center gap-3 mb-1">
           <p className="m-0">Items per page</p>
-          <select
-            class="form-select"
-            aria-label="Default select example"
-            onChange={handleLimit}
-          >
-            <option selected value={10}>
-              10
-            </option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
-          </select>
+
+          <Dropdown>
+              <Dropdown.Toggle
+                className="bg-white shadow-sm text-dark"
+                id="dropdown-basic"
+              >
+               {limit}
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="border-0 shadow">
+                <Dropdown.Item onClick={() => handleLimit(10)}>
+                  10
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => handleLimit(20)}>
+                20
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => handleLimit(50)}>
+                50
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => handleLimit(100)}>
+               100
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+        
+
           <span> {`${taskList.length}/${totalTasks}`}</span>
         </div>
         <nav aria-label="Page navigation example">

@@ -1,5 +1,8 @@
 body{
     background-color: #F8F9FA;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .dropdown-toggle::after {
@@ -9,7 +12,6 @@ body{
 .dropdown-menu[data-bs-popper] {
 
     left: -83px;
-    
 }
 
 .bg-delete{
@@ -21,3 +23,4 @@ body{
 .cursor-pointer {
     cursor: pointer;
 }
+
